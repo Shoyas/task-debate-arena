@@ -3,10 +3,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Github } from "lucide-react";
 import { getProviders, signIn } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { Github } from "lucide-react"
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 
 
