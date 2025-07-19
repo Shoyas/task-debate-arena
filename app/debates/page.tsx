@@ -18,7 +18,6 @@ import {
   TrendingUp,
   Users
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -308,12 +307,10 @@ export default function DebatesPage() {
                       </div>
                       {debate.imageUrl && (
                         <div className="ml-6 relative group-hover:scale-105 transition-transform duration-300">
-                          <Image
+                          <img
                             src={debate.imageUrl || "/placeholder.svg"}
                             alt={debate.title}
                             className="w-24 h-24 object-cover rounded-xl shadow-lg"
-                            width={96}
-                            height={96}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                         </div>

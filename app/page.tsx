@@ -7,7 +7,6 @@ import { formatTimeRemaining } from "@/lib/utils/time"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Clock, MessageSquare, Plus, Star, TrendingUp, Trophy, Users, Zap } from "lucide-react"
 import { getServerSession } from "next-auth"
-import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 
@@ -67,7 +66,7 @@ export default async function HomePage() {
         {/* Hero Section */}
         <div className="text-center mb-16 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-3xl -z-10" />
-          <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-12 border border-white/20 shadow-2xl">
+          <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-12  shadow-2xl">
             <div className="flex items-center justify-center mb-6">
               <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl">
                 <MessageSquare className="h-8 w-8 text-white" />
@@ -173,12 +172,10 @@ export default async function HomePage() {
                       </div>
                       {debate.imageUrl && (
                         <div className="ml-6 relative">
-                          <Image
+                          <img
                             src={debate.imageUrl || "/placeholder.svg"}
                             alt={debate.title}
                             className="w-24 h-24 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-                            width={96}
-                            height={96}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                         </div>
@@ -232,13 +229,13 @@ export default async function HomePage() {
           {/* Sidebar */}
           <div className="space-y-8">
             {/* Top Debaters */}
-            <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950 border-0 shadow-xl">
+            <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950 border-0 shadow-xl text-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg">
                     <Trophy className="h-5 w-5 text-white" />
                   </div>
-                  <span className="text-xl dark:text-white">Hall of Fame</span>
+                  <span className="text-xl ">Hall of Fame</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -284,7 +281,7 @@ export default async function HomePage() {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full mt-6 bg-white/60 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 border-0 shadow-md"
+                  className="w-full mt-6 bg-white/60 dark:bg-slate-800/60 dark:hover:bg-slate-800 border-0 shadow-md"
                   asChild
                 >
                   <Link href="/scoreboard">View Full Leaderboard</Link>
@@ -293,7 +290,7 @@ export default async function HomePage() {
             </Card>
 
             {/* Quick Stats */}
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-0 shadow-xl">
+            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-0 shadow-xl text-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">

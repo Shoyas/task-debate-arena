@@ -1,10 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const debate = await prisma.debate.findUnique({
-      where: { id: params.id },
+      where: { id: params?.id },
       include: {
         creator: {
           select: { id: true, name: true, image: true },

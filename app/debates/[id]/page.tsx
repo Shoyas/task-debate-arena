@@ -13,7 +13,6 @@ import { formatTimeRemaining, isDebateExpired } from "@/lib/utils/time";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Clock, MessageSquare, Share2, Trophy, Users } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -151,232 +150,233 @@ export default function DebateDetailPage() {
   const opposeVotes = opposeArguments.reduce((sum, arg) => sum + arg._count.votes, 0)
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Debate Header */}
-      <Card className="mb-8">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge variant="secondary">{debate.category}</Badge>
-                {isExpired && (
-                  <Badge variant="destructive">
-                    <Clock className="mr-1 h-3 w-3" />
-                    Expired
-                  </Badge>
-                )}
-                {debate.winningSide && (
-                  <Badge variant="default">
-                    <Trophy className="mr-1 h-3 w-3" />
-                    {debate.winningSide === "SUPPORT" ? "Support" : "Oppose"} Won
-                  </Badge>
-                )}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
+      <div className="container mx-auto px-4 py-8">
+        {/* Debate Header */}
+        <Card className="mb-8">
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="secondary">{debate.category}</Badge>
+                  {isExpired && (
+                    <Badge variant="destructive">
+                      <Clock className="mr-1 h-3 w-3" />
+                      Expired
+                    </Badge>
+                  )}
+                  {debate.winningSide && (
+                    <Badge variant="default">
+                      <Trophy className="mr-1 h-3 w-3" />
+                      {debate.winningSide === "SUPPORT" ? "Support" : "Oppose"} Won
+                    </Badge>
+                  )}
+                </div>
+
+                <CardTitle className="text-2xl mb-2">{debate.title}</CardTitle>
+                <CardDescription className="text-base">{debate.description}</CardDescription>
+
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {debate.tags.map((tag) => (
+                    <Badge key={tag} variant="outline">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
               </div>
 
-              <CardTitle className="text-2xl mb-2">{debate.title}</CardTitle>
-              <CardDescription className="text-base">{debate.description}</CardDescription>
-
-              <div className="flex flex-wrap gap-2 mt-4">
-                {debate.tags.map((tag) => (
-                  <Badge key={tag} variant="outline">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            {debate.imageUrl && (
-              <Image
-                src={debate.imageUrl || "/placeholder.svg"}
-                alt={debate.title}
-                className="w-32 h-32 object-cover rounded-lg ml-6"
-                width={200}
-                height={200}
-              />
-            )}
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Users className="h-4 w-4" />
-                {debate._count.participations} participants
-              </div>
-              <div className="flex items-center gap-1">
-                <MessageSquare className="h-4 w-4" />
-                {debate._count.arguments} arguments
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                {isExpired ? "Expired" : formatTimeRemaining(new Date(debate.expiresAt))}
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleShareDebate} className="flex items-center gap-1">
-                <Share2 className="h-4 w-4" />
-                Share
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={debate.creator.image || ""} />
-                <AvatarFallback>{debate.creator.name?.[0]}</AvatarFallback>
-              </Avatar>
-              <span className="text-sm">Created by {debate.creator.name}</span>
-            </div>
-          </div>
-
-          {/* Join Debate Button */}
-          {session && !userParticipation && !isExpired && (
-            <div className="mt-4">
-              <Button onClick={() => setShowJoinDialog(true)}>Join Debate</Button>
-            </div>
-          )}
-
-          {/* User's Side */}
-          {userParticipation && (
-            <div className="mt-4 p-3 bg-accent rounded-lg">
-              <p className="text-sm">
-                You joined the <strong>{userParticipation.side === "SUPPORT" ? "Support" : "Oppose"}</strong> side
-              </p>
-
-              {/* Reply Timer Warning */}
-              {userParticipation && !userParticipation.firstArgumentPostedAt && !isExpired && (
-                <p className={`text-sm mt-1 ${replyTimerExpired ? "text-destructive" : "text-amber-500"}`}>
-                  {replyTimerExpired
-                    ? "Your 5-minute window to post your first argument has expired!"
-                    : "You must post your first argument within 5 minutes of joining."}
-                </p>
+              {debate.imageUrl && (
+                <img
+                  src={debate.imageUrl || "/placeholder.svg"}
+                  alt={debate.title}
+                  className="w-32 h-32 object-cover rounded-lg ml-6"
+                />
               )}
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardHeader>
 
-      {/* Vote Tally */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Current Vote Tally</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400">{supportVotes}</div>
-              <div className="text-sm text-muted-foreground">Support Votes</div>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Users className="h-4 w-4" />
+                  {debate._count.participations} participants
+                </div>
+                <div className="flex items-center gap-1">
+                  <MessageSquare className="h-4 w-4" />
+                  {debate._count.arguments} arguments
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  {isExpired ? "Expired" : formatTimeRemaining(new Date(debate.expiresAt))}
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleShareDebate} className="flex items-center gap-1">
+                  <Share2 className="h-4 w-4" />
+                  Share
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={debate.creator.image || ""} />
+                  <AvatarFallback>{debate.creator.name?.[0]}</AvatarFallback>
+                </Avatar>
+                <span className="text-sm">Created by {debate.creator.name}</span>
+              </div>
             </div>
-            <div className="text-center p-4 bg-red-50 dark:bg-red-950 rounded-lg">
-              <div className="text-2xl font-bold text-red-600 dark:text-red-400">{opposeVotes}</div>
-              <div className="text-sm text-muted-foreground">Oppose Votes</div>
+
+            {/* Join Debate Button */}
+            {session && !userParticipation && !isExpired && (
+              <div className="mt-4">
+                <Button onClick={() => setShowJoinDialog(true)}>Join Debate</Button>
+              </div>
+            )}
+
+            {/* User's Side */}
+            {userParticipation && (
+              <div className="mt-4 p-3 bg-accent rounded-lg">
+                <p className="text-sm">
+                  You joined the <strong>{userParticipation.side === "SUPPORT" ? "Support" : "Oppose"}</strong> side
+                </p>
+
+                {/* Reply Timer Warning */}
+                {userParticipation && !userParticipation.firstArgumentPostedAt && !isExpired && (
+                  <p className={`text-sm mt-1 ${replyTimerExpired ? "text-destructive" : "text-amber-500"}`}>
+                    {replyTimerExpired
+                      ? "Your 5-minute window to post your first argument has expired!"
+                      : "You must post your first argument within 5 minutes of joining."}
+                  </p>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Vote Tally */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Current Vote Tally</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">{supportVotes}</div>
+                <div className="text-sm text-muted-foreground">Support Votes</div>
+              </div>
+              <div className="text-center p-4 bg-red-50 dark:bg-red-950 rounded-lg">
+                <div className="text-2xl font-bold text-red-600 dark:text-red-400">{opposeVotes}</div>
+                <div className="text-sm text-muted-foreground">Oppose Votes</div>
+              </div>
             </div>
-          </div>
 
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className="bg-green-500 transition-all duration-300"
-                style={{
-                  width: `${supportVotes + opposeVotes > 0 ? (supportVotes / (supportVotes + opposeVotes)) * 100 : 50}%`,
-                }}
-              />
-              <div
-                className="bg-red-500 transition-all duration-300"
-                style={{
-                  width: `${supportVotes + opposeVotes > 0 ? (opposeVotes / (supportVotes + opposeVotes)) * 100 : 50}%`,
-                }}
-              />
+            {/* Progress Bar */}
+            <div className="mt-4">
+              <div className="flex h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="bg-green-500 transition-all duration-300"
+                  style={{
+                    width: `${supportVotes + opposeVotes > 0 ? (supportVotes / (supportVotes + opposeVotes)) * 100 : 50}%`,
+                  }}
+                />
+                <div
+                  className="bg-red-500 transition-all duration-300"
+                  style={{
+                    width: `${supportVotes + opposeVotes > 0 ? (opposeVotes / (supportVotes + opposeVotes)) * 100 : 50}%`,
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Arguments Section */}
-      <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">All Arguments ({debate.arguments.length})</TabsTrigger>
-          <TabsTrigger value="support">Support ({supportArguments.length})</TabsTrigger>
-          <TabsTrigger value="oppose">Oppose ({opposeArguments.length})</TabsTrigger>
-        </TabsList>
+        {/* Arguments Section */}
+        <Tabs defaultValue="all" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="all">All Arguments ({debate.arguments.length})</TabsTrigger>
+            <TabsTrigger value="support">Support ({supportArguments.length})</TabsTrigger>
+            <TabsTrigger value="oppose">Oppose ({opposeArguments.length})</TabsTrigger>
+          </TabsList>
 
-        {/* Argument Form */}
-        {userParticipation && !isExpired && (
-          <ArgumentForm debateId={debate.id} userSide={userParticipation.side} onSubmit={handleArgumentSubmit} />
-        )}
-
-        <TabsContent value="all" className="space-y-4">
-          {debate.arguments.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">No arguments posted yet. Be the first to share your opinion!</p>
-              </CardContent>
-            </Card>
-          ) : (
-            debate.arguments.map((argument) => (
-              <ArgumentCard
-                key={argument.id}
-                argument={argument}
-                currentUserId={session?.user?.id}
-                onVoteChange={fetchDebate}
-                isDebateExpired={isExpired}
-                onArgumentUpdate={fetchDebate}
-              />
-            ))
+          {/* Argument Form */}
+          {userParticipation && !isExpired && (
+            <ArgumentForm debateId={debate.id} userSide={userParticipation.side} onSubmit={handleArgumentSubmit} />
           )}
-        </TabsContent>
 
-        <TabsContent value="support" className="space-y-4">
-          {supportArguments.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-muted-foreground">No support arguments yet.</p>
-              </CardContent>
-            </Card>
-          ) : (
-            supportArguments.map((argument) => (
-              <ArgumentCard
-                key={argument.id}
-                argument={argument}
-                currentUserId={session?.user?.id}
-                onVoteChange={fetchDebate}
-                isDebateExpired={isExpired}
-                onArgumentUpdate={fetchDebate}
-              />
-            ))
-          )}
-        </TabsContent>
+          <TabsContent value="all" className="space-y-4">
+            {debate.arguments.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <MessageSquare className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <p className="text-muted-foreground">No arguments posted yet. Be the first to share your opinion!</p>
+                </CardContent>
+              </Card>
+            ) : (
+              debate.arguments.map((argument) => (
+                <ArgumentCard
+                  key={argument.id}
+                  argument={argument}
+                  currentUserId={session?.user?.id}
+                  onVoteChange={fetchDebate}
+                  isDebateExpired={isExpired}
+                  onArgumentUpdate={fetchDebate}
+                />
+              ))
+            )}
+          </TabsContent>
 
-        <TabsContent value="oppose" className="space-y-4">
-          {opposeArguments.length === 0 ? (
-            <Card>
-              <CardContent className="text-center py-8">
-                <p className="text-muted-foreground">No oppose arguments yet.</p>
-              </CardContent>
-            </Card>
-          ) : (
-            opposeArguments.map((argument) => (
-              <ArgumentCard
-                key={argument.id}
-                argument={argument}
-                currentUserId={session?.user?.id}
-                onVoteChange={fetchDebate}
-                isDebateExpired={isExpired}
-                onArgumentUpdate={fetchDebate}
-              />
-            ))
-          )}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="support" className="space-y-4">
+            {supportArguments.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <p className="text-muted-foreground">No support arguments yet.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              supportArguments.map((argument) => (
+                <ArgumentCard
+                  key={argument.id}
+                  argument={argument}
+                  currentUserId={session?.user?.id}
+                  onVoteChange={fetchDebate}
+                  isDebateExpired={isExpired}
+                  onArgumentUpdate={fetchDebate}
+                />
+              ))
+            )}
+          </TabsContent>
 
-      {/* Join Debate Dialog */}
-      <JoinDebateDialog
-        open={showJoinDialog}
-        onOpenChange={setShowJoinDialog}
-        debateId={debate.id}
-        debateTitle={debate.title}
-        onSuccess={handleJoinSuccess}
-      />
+          <TabsContent value="oppose" className="space-y-4">
+            {opposeArguments.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <p className="text-muted-foreground">No oppose arguments yet.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              opposeArguments.map((argument) => (
+                <ArgumentCard
+                  key={argument.id}
+                  argument={argument}
+                  currentUserId={session?.user?.id}
+                  onVoteChange={fetchDebate}
+                  isDebateExpired={isExpired}
+                  onArgumentUpdate={fetchDebate}
+                />
+              ))
+            )}
+          </TabsContent>
+        </Tabs>
+
+        {/* Join Debate Dialog */}
+        <JoinDebateDialog
+          open={showJoinDialog}
+          onOpenChange={setShowJoinDialog}
+          debateId={debate.id}
+          debateTitle={debate.title}
+          onSuccess={handleJoinSuccess}
+        />
+      </div>
     </div>
+    
   )
 }
