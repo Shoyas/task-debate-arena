@@ -11,6 +11,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
 
+
 async function getRecentDebates() {
   return await prisma.debate.findMany({
     where: { isActive: true },

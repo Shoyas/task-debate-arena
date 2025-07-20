@@ -1,5 +1,6 @@
 'use client'
 
+import ImageUploader from "@/components/ImageUploader"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -45,6 +46,7 @@ export default function CreateDebatePage() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [currentTag, setCurrentTag] = useState("")
+  const [url, setUrl] = useState('');
 
   const {
     register,
@@ -215,7 +217,7 @@ export default function CreateDebatePage() {
               </div>
 
               {/* Image URL */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="imageUrl" className="text-slate-700 dark:text-slate-300">Banner Image URL (Optional)</Label>
                 <Input 
                   id="imageUrl" 
@@ -224,8 +226,28 @@ export default function CreateDebatePage() {
                   {...register("imageUrl")}
                   className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200"
                 />
+                
                 {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl.message}</p>}
+              </div> */}
+
+              <div className="space-y-2">
+                <Label className="text-slate-700 dark:text-slate-300">
+                  Banner Image (Optional)
+                </Label>
+                
+                <ImageUploader
+                  value={watch('imageUrl')}
+                  onChange={(url) => setValue('imageUrl', url)} 
+                />
+
+                <input type="hidden" {...register('imageUrl')} />
+
+                {errors.imageUrl && (
+                  <p className="text-sm text-destructive">{errors.imageUrl.message}</p>
+                )}
               </div>
+
+              
 
               {/* Duration */}
               <div className="space-y-2">

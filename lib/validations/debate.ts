@@ -1,4 +1,4 @@
-import {z} from "zod";
+import { z } from "zod";
 
 
 export const createDebateSchema = z.object({
@@ -9,7 +9,7 @@ export const createDebateSchema = z.object({
     .max(2000, "Description must be less than 2000 characters"),
   tags: z.array(z.string()).min(1, "At least one tag is required").max(5, "Maximum 5 tags allowed"),
   category: z.string().min(1, "Category is required"),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+  imageUrl: z.string().optional(),
   duration: z.number().min(60, "Minimum duration is 1 hour").max(10080, "Maximum duration is 1 week"),
 })
 
