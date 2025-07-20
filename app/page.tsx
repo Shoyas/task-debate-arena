@@ -75,7 +75,7 @@ export default async function HomePage() {
             <h1 className="text-5xl font-bold mb-6 text-blue-600 dark:text-blue-400">
               Community Debate Arena
             </h1>
-            <p className="text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto">
               Join the ultimate battle of opinions. Create compelling debates, choose your stance, and let the most
               persuasive arguments triumph in our vibrant community.
             </p>
@@ -83,12 +83,11 @@ export default async function HomePage() {
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button
                   asChild
-                  variant="default"
-                  size="lg"
-                  className="bg-amber-500 hover:bg-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  size="sm"
+                  className="hidden md:flex bg-amber-500 text-white"
                 >
                   <Link href="/debates/create">
-                    <Plus className="mr-2 h-5 w-5" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Create Debate
                   </Link>
                 </Button>

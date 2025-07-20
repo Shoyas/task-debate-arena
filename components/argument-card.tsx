@@ -108,7 +108,7 @@ export function ArgumentCard({
         
         if (onArgumentUpdate) onArgumentUpdate()
       } else {
-        const error = await response.json()
+        const error = await response.json();
         if (error.toxicWords) {
           toast({
             variant: "destructive",
@@ -332,3 +332,5 @@ export function ArgumentCard({
     </>
   )
 }
+
+
