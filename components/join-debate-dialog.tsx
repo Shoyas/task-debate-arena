@@ -68,10 +68,10 @@ export function JoinDebateDialog({ open, onOpenChange, debateId, debateTitle, on
           <RadioGroup
             value={selectedSide}
             onValueChange={(value) => setValue("side", value as "SUPPORT" | "OPPOSE")}
-            className="space-y-3"
+            className="space-y-3 "
           >
-            <div className="flex items-center space-x-3 p-4 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all cursor-pointer">
-              <RadioGroupItem value="SUPPORT" id="support" />
+            <div className="flex items-center space-x-3 p-4 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all cursor-pointer ">
+              <RadioGroupItem className="bg-slate-800 " value="SUPPORT" id="support" />
               <Label htmlFor="support" className="flex items-center gap-2 cursor-pointer flex-1">
                 <ThumbsUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <div>
@@ -82,7 +82,7 @@ export function JoinDebateDialog({ open, onOpenChange, debateId, debateTitle, on
             </div>
 
             <div className="flex items-center space-x-3 p-4 border border-amber-300 dark:border-amber-800 rounded-lg hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all cursor-pointer">
-              <RadioGroupItem value="OPPOSE" id="oppose" />
+              <RadioGroupItem className="bg-slate-800 " value="OPPOSE" id="oppose" />
               <Label htmlFor="oppose" className="flex items-center gap-2 cursor-pointer flex-1">
                 <ThumbsDown className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                 <div>

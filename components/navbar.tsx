@@ -126,7 +126,7 @@ export function Navbar() {
                           <p className="font-semibold text-slate-800 dark:text-slate-200">{session.user.name}</p>
                         )}
                         {session.user?.email && (
-                          <p className="w-[180px] truncate text-sm text-muted-foreground">{session.user.email}</p>
+                          <p className="w-[180px] truncate text-xs text-muted-foreground">{session.user.email}</p>
                         )}
                       </div>
                     </div>
@@ -135,7 +135,7 @@ export function Navbar() {
                       asChild
                       className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     >
-                      <Link href="/profile" className="flex items-center">
+                      <Link href="/profile" className="flex items-center text-slate-800 dark:text-slate-200">
                         <User className="mr-3 h-4 w-4" />
                         Profile
                       </Link>

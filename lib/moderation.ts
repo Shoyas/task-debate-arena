@@ -24,6 +24,9 @@ const BANNED_WORDS = [
   "homophobic",
   "transphobic",
   "bigot",
+
+  //! test
+  "vudarbeta"
 ]
 
 export function containsToxicContent(text: string): boolean {

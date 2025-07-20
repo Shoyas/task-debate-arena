@@ -22,7 +22,7 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <Card className="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-800 shadow-lg">
+        <Card className="bg-white dark:bg-slate-900 dark:border-blue-800 shadow-lg">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="p-3 bg-blue-500 rounded-lg">
@@ -45,7 +45,7 @@ export default function SignInPage() {
                   key={provider.name}
                   onClick={() => signIn(provider.id, { callbackUrl: "/" })}
                   variant="outline"
-                  className="w-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  className="w-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 >
                   {provider.name === "Google" && <LogIn className="mr-2 h-4 w-4" />}
                   {provider.name === "GitHub" && <Github className="mr-2 h-4 w-4" />}

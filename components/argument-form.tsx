@@ -80,7 +80,7 @@ export function ArgumentForm({ debateId, userSide, onSubmit }: ArgumentFormProps
               id="content"
               placeholder="Share your thoughts and reasoning..."
               rows={4}
-              className="bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 focus-visible:ring-1 focus-visible:ring-blue-500 transition-all"
+              className="bg-white dark:bg-slate-800 border border-blue-200 dark:border-blue-800 focus-visible:ring-1 focus-visible:ring-blue-500 transition-all text-slate-800 dark:text-slate-200"
               {...register("content")}
             />
             {errors.content && (
@@ -89,9 +89,9 @@ export function ArgumentForm({ debateId, userSide, onSubmit }: ArgumentFormProps
           </div>
 
           {toxicError && (
-            <Alert variant="destructive" className="border border-red-200 dark:border-red-800 shadow-sm">
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-sm text-red-700 dark:text-red-400">
+            <Alert variant="destructive" className="bg-amber-300  shadow-sm ">
+              <AlertTriangle className="h-4 w-4 text-slate-800 dark:text-red-500" />
+              <AlertDescription className="text-sm text-slate-800 dark:text-red-500">
                 {toxicError}
               </AlertDescription>
             </Alert>
