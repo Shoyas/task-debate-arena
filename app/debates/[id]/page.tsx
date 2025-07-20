@@ -13,6 +13,7 @@ import { formatTimeRemaining, isDebateExpired } from "@/lib/utils/time";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Clock, MessageSquare, Share2, Trophy, Users } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -186,10 +187,12 @@ export default function DebateDetailPage() {
               </div>
 
               {debate.imageUrl && (
-                <img
+                <Image
                   src={debate.imageUrl || "/placeholder.svg"}
                   alt={debate.title}
                   className="w-32 h-32 object-cover rounded-lg ml-6"
+                  width={200}
+                  height={200}
                 />
               )}
             </div>

@@ -1,10 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useSession, signOut } from "next-auth/react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,17 +10,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Plus, Trophy, MessageSquare, User, LogOut, Sparkles } from "lucide-react"
+import { LogOut, Menu, MessageSquare, Plus, Sparkles, Trophy, User } from "lucide-react"
+import { signOut, useSession } from "next-auth/react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useState } from "react"
 import { ThemeToggle } from "./theme-toggle"
 
 export function Navbar() {
   const { data: session } = useSession()
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
 
   const navigation = [
     { name: "Debates", href: "/debates", icon: MessageSquare },
     { name: "Leaderboard", href: "/scoreboard", icon: Trophy },
   ]
+
+  const isActive = (href: string) => {
+    return href === "/" ? pathname === "/" : pathname.startsWith(href)
+  }
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 shadow-lg">
@@ -31,28 +37,45 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+            <div className="p-2 bg-blue-500 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
               <MessageSquare className="h-6 w-6 text-white" />
             </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="font-bold text-xl text-blue-600 dark:text-blue-400">
               Debate Arena
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 group"
-              >
-                <div className="p-1 rounded-lg group-hover:bg-gradient-to-r group-hover:from-blue-100 group-hover:to-purple-100 dark:group-hover:from-blue-900 dark:group-hover:to-purple-900 transition-all duration-300">
-                  <item.icon className="h-4 w-4" />
-                </div>
-                <span>{item.name}</span>
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const active = isActive(item.href)
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center space-x-2 text-sm font-medium transition-all duration-300 hover:scale-105 group ${
+                    active
+                      ? "text-blue-600 dark:text-blue-400"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <div
+                    className={`p-1 rounded-lg transition-colors ${
+                      active
+                        ? "bg-blue-500"
+                        : "group-hover:bg-blue-100 dark:group-hover:bg-blue-900/20"
+                    }`}
+                  >
+                    <item.icon
+                      className={`h-4 w-4 ${
+                        active ? "text-white" : "text-muted-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                      }`}
+                    />
+                  </div>
+                  <span>{item.name}</span>
+                </Link>
+              )
+            })}
           </div>
 
           {/* Right Side */}
@@ -64,7 +87,7 @@ export function Navbar() {
                 <Button
                   asChild
                   size="sm"
-                  className="hidden md:flex bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="hidden md:flex bg-amber-500 hover:bg-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   <Link href="/debates/create">
                     <Plus className="mr-2 h-4 w-4" />
@@ -80,7 +103,7 @@ export function Navbar() {
                     >
                       <Avatar className="h-10 w-10 shadow-lg">
                         <AvatarImage src={session.user?.image || ""} />
-                        <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold">
+                        <AvatarFallback className="bg-blue-500 text-white font-semibold">
                           {session.user?.name?.[0]}
                         </AvatarFallback>
                       </Avatar>
@@ -91,10 +114,10 @@ export function Navbar() {
                     align="end"
                     forceMount
                   >
-                    <div className="flex items-center justify-start gap-3 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 rounded-lg m-2">
+                    <div className="flex items-center justify-start gap-3 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg m-2">
                       <Avatar className="h-12 w-12 shadow-lg">
                         <AvatarImage src={session.user?.image || ""} />
-                        <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold">
+                        <AvatarFallback className="bg-blue-500 text-white font-semibold">
                           {session.user?.name?.[0]}
                         </AvatarFallback>
                       </Avatar>
@@ -110,7 +133,7 @@ export function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       asChild
-                      className="cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-950 dark:hover:to-purple-950"
+                      className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     >
                       <Link href="/profile" className="flex items-center">
                         <User className="mr-3 h-4 w-4" />
@@ -119,7 +142,7 @@ export function Navbar() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="cursor-pointer hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 dark:hover:from-red-950 dark:hover:to-pink-950 text-red-600 dark:text-red-400"
+                      className="cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400"
                       onSelect={(event) => {
                         event.preventDefault()
                         signOut({ callbackUrl: "/" })
@@ -135,7 +158,7 @@ export function Navbar() {
               <Button
                 asChild
                 size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="bg-purple-500 hover:bg-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Link href="/auth/signin">
                   <Sparkles className="mr-2 h-4 w-4" />
@@ -150,7 +173,7 @@ export function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden hover:bg-gradient-to-r hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900 dark:hover:to-purple-900"
+                  className="md:hidden hover:bg-blue-100 dark:hover:bg-blue-900/20"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
@@ -160,24 +183,41 @@ export function Navbar() {
                 className="w-[300px] sm:w-[400px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-0"
               >
                 <div className="flex flex-col space-y-6 mt-8">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="flex items-center space-x-3 text-lg font-medium p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-950 dark:hover:to-purple-950 transition-all duration-300"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <div className="p-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-lg">
-                        <item.icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <span>{item.name}</span>
-                    </Link>
-                  ))}
+                  {navigation.map((item) => {
+                    const active = isActive(item.href)
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`flex items-center space-x-3 text-lg font-medium p-3 rounded-xl transition-colors duration-300 ${
+                          active
+                            ? "bg-blue-500 text-white"
+                            : "hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <div
+                          className={`p-2 rounded-lg ${
+                            active
+                              ? "bg-white text-blue-600"
+                              : "bg-blue-100 dark:bg-blue-900"
+                          }`}
+                        >
+                          <item.icon
+                            className={`h-5 w-5 ${
+                              active ? "text-blue-600" : "text-blue-600 dark:text-blue-400"
+                            }`}
+                          />
+                        </div>
+                        <span>{item.name}</span>
+                      </Link>
+                    )
+                  })}
 
                   {session && (
                     <Link
                       href="/debates/create"
-                      className="flex items-center space-x-3 text-lg font-medium p-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                      className="flex items-center space-x-3 text-lg font-medium p-3 rounded-xl bg-amber-500 text-white shadow-lg"
                       onClick={() => setIsOpen(false)}
                     >
                       <Plus className="h-5 w-5" />

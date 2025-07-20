@@ -7,9 +7,9 @@ import { formatTimeRemaining } from "@/lib/utils/time"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Clock, MessageSquare, Plus, Star, TrendingUp, Trophy, Users, Zap } from "lucide-react"
 import { getServerSession } from "next-auth"
+import Image from "next/image"
 import Link from "next/link"
 import { Suspense } from "react"
-
 
 async function getRecentDebates() {
   return await prisma.debate.findMany({
@@ -61,21 +61,21 @@ export default async function HomePage() {
   const [recentDebates, topDebaters] = await Promise.all([getRecentDebates(), getTopDebaters()])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-16 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl blur-3xl -z-10" />
-          <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-12  shadow-2xl">
+          <div className="absolute inset-0 bg-blue-100 dark:bg-blue-900/20 rounded-3xl blur-3xl -z-10" />
+          <div className="relative bg-white dark:bg-slate-900 rounded-3xl p-12 shadow-2xl border border-blue-200 dark:border-blue-800">
             <div className="flex items-center justify-center mb-6">
-              <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl">
+              <div className="p-4 bg-blue-500 rounded-2xl shadow-lg">
                 <MessageSquare className="h-8 w-8 text-white" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold mb-6 text-blue-600 dark:text-blue-400">
               Community Debate Arena
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-slate-700 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
               Join the ultimate battle of opinions. Create compelling debates, choose your stance, and let the most
               persuasive arguments triumph in our vibrant community.
             </p>
@@ -83,19 +83,21 @@ export default async function HomePage() {
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button
                   asChild
+                  variant="default"
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="bg-amber-500 hover:bg-amber-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   <Link href="/debates/create">
                     <Plus className="mr-2 h-5 w-5" />
                     Create Debate
                   </Link>
                 </Button>
+                
                 <Button
-                  variant="outline"
+                  variant="default"
                   size="lg"
                   asChild
-                  className="border-2 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-950 dark:hover:to-purple-950 transition-all duration-300 bg-transparent"
+                  className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 bg-transparent"
                 >
                   <Link href="/debates">
                     <Zap className="mr-2 h-5 w-5" />
@@ -107,7 +109,7 @@ export default async function HomePage() {
               <Button
                 asChild
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className="bg-purple-500 hover:bg-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Link href="/auth/signin">
                   <Star className="mr-2 h-5 w-5" />
@@ -123,15 +125,15 @@ export default async function HomePage() {
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg">
+                <div className="p-2 bg-blue-500 rounded-lg shadow">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold">Trending Debates</h2>
+                <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-200">Trending Debates</h2>
               </div>
               <Button
                 variant="outline"
                 asChild
-                className="hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 dark:hover:from-green-950 dark:hover:to-emerald-950 bg-transparent"
+                className="hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-500 text-blue-600 bg-transparent"
               >
                 <Link href="/debates">View All</Link>
               </Button>
@@ -141,21 +143,21 @@ export default async function HomePage() {
               {recentDebates.map((debate, index) => (
                 <Card
                   key={debate.id}
-                  className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden"
+                  className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 bg-white dark:bg-slate-900 border border-blue-100 dark:border-blue-900/30 shadow-lg overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <CardHeader className="relative">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-3">
                           <Badge
                             variant="secondary"
-                            className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 text-blue-700 dark:text-blue-300 border-0"
+                            className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-0"
                           >
                             {debate.category}
                           </Badge>
                           {index < 3 && (
-                            <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white border-0">
+                            <Badge className="bg-amber-500 text-white border-0">
                               <Star className="mr-1 h-3 w-3" />
                               Hot
                             </Badge>
@@ -166,16 +168,18 @@ export default async function HomePage() {
                             {debate.title}
                           </Link>
                         </CardTitle>
-                        <CardDescription className="line-clamp-2 text-base leading-relaxed">
+                        <CardDescription className="line-clamp-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">
                           {debate.description}
                         </CardDescription>
                       </div>
                       {debate.imageUrl && (
                         <div className="ml-6 relative">
-                          <img
-                            src={debate.imageUrl || "/placeholder.svg"}
+                          <Image
+                            src={debate.imageUrl || "/placeholder.png"}
                             alt={debate.title}
                             className="w-24 h-24 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300"
+                            width={96}
+                            height={96}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-xl" />
                         </div>
@@ -188,7 +192,7 @@ export default async function HomePage() {
                         <Badge
                           key={tag}
                           variant="outline"
-                          className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-950 dark:hover:to-purple-950 transition-all duration-300 cursor-pointer"
+                          className="hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600 dark:text-blue-400 transition-all duration-300 cursor-pointer border-blue-300 dark:border-blue-700"
                         >
                           {tag}
                         </Badge>
@@ -201,19 +205,19 @@ export default async function HomePage() {
                           <Users className="h-4 w-4" />
                           <span className="font-medium">{debate._count.participations}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                        <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
                           <MessageSquare className="h-4 w-4" />
                           <span className="font-medium">{debate._count.arguments}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
+                        <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
                           <Clock className="h-4 w-4" />
                           <span className="font-medium">{formatTimeRemaining(debate.expiresAt)}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <Avatar className="h-7 w-7 ring-2 ring-white dark:ring-slate-800 shadow-md">
-                          <AvatarImage src={debate.creator.image || ""} />
-                          <AvatarFallback className="text-xs bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                          <AvatarImage src={debate.creator?.image || "/person-placeholder.png"} />
+                          <AvatarFallback className="text-xs bg-blue-500 text-white">
                             {debate.creator.name?.[0]}
                           </AvatarFallback>
                         </Avatar>
@@ -229,13 +233,13 @@ export default async function HomePage() {
           {/* Sidebar */}
           <div className="space-y-8">
             {/* Top Debaters */}
-            <Card className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950 border-0 shadow-xl text-foreground">
+            <Card className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30 shadow-xl text-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg">
+                  <div className="p-2 bg-amber-500 rounded-lg shadow">
                     <Trophy className="h-5 w-5 text-white" />
                   </div>
-                  <span className="text-xl ">Hall of Fame</span>
+                  <span className="text-xl text-slate-800 dark:text-slate-200">Hall of Fame</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -243,36 +247,36 @@ export default async function HomePage() {
                   {topDebaters.map((debater, index) => (
                     <div
                       key={debater.id}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300"
+                      className="flex items-center gap-3 p-3 rounded-xl bg-white/90 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-800/90 transition-all duration-300 border border-amber-100 dark:border-amber-900/30"
                     >
                       <div
-                        className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
+                        className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm shadow ${
                           index === 0
-                            ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white"
+                            ? "bg-amber-500 text-white"
                             : index === 1
-                              ? "bg-gradient-to-r from-gray-300 to-gray-500 text-white"
+                              ? "bg-blue-500 text-white"
                               : index === 2
-                                ? "bg-gradient-to-r from-amber-400 to-amber-600 text-white"
-                                : "bg-gradient-to-r from-blue-400 to-blue-600 text-white"
+                                ? "bg-purple-500 text-white"
+                                : "bg-blue-500 text-white"
                         }`}
                       >
                         {index + 1}
                       </div>
                       <Avatar className="h-10 w-10 ring-2 ring-white dark:ring-slate-700 shadow-md">
                         <AvatarImage src={debater.image || ""} />
-                        <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                        <AvatarFallback className="bg-blue-500 text-white">
                           {debater.name?.[0]}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <p className="font-semibold text-slate-800 dark:text-slate-200">{debater.name}</p>
                         <p className="text-sm text-slate-600 dark:text-slate-400">
-                          <span className="font-medium text-orange-600 dark:text-orange-400">{debater.totalVotes}</span>{" "}
+                          <span className="font-medium text-amber-600 dark:text-amber-400">{debater.totalVotes}</span>{" "}
                           votes earned
                         </p>
                       </div>
                       {index < 3 && (
-                        <div className="text-yellow-500">
+                        <div className="text-amber-500">
                           <Star className="h-4 w-4 fill-current" />
                         </div>
                       )}
@@ -281,7 +285,7 @@ export default async function HomePage() {
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full mt-6 bg-white/60 dark:bg-slate-800/60 dark:hover:bg-slate-800 border-0 shadow-md"
+                  className="w-full mt-6 bg-white/90 dark:bg-slate-800/80 dark:hover:bg-slate-800 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 shadow-md hover:bg-amber-50 dark:hover:bg-amber-900/20"
                   asChild
                 >
                   <Link href="/scoreboard">View Full Leaderboard</Link>
@@ -290,13 +294,13 @@ export default async function HomePage() {
             </Card>
 
             {/* Quick Stats */}
-            <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-0 shadow-xl text-foreground">
+            <Card className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 shadow-xl text-foreground">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg">
+                  <div className="p-2 bg-purple-500 rounded-lg shadow">
                     <TrendingUp className="h-5 w-5 text-white" />
                   </div>
-                  <span className="text-xl">Platform Insights</span>
+                  <span className="text-xl text-slate-800 dark:text-slate-200">Platform Insights</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -306,7 +310,7 @@ export default async function HomePage() {
                       {[1, 2, 3].map((i) => (
                         <div
                           key={i}
-                          className="flex justify-between items-center p-3 rounded-lg bg-white/60 dark:bg-slate-800/60"
+                          className="flex justify-between items-center p-3 rounded-lg bg-white/60 dark:bg-slate-700/60"
                         >
                           <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-24 animate-pulse" />
                           <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-12 animate-pulse" />
@@ -334,9 +338,9 @@ async function StatsDisplay() {
   ])
 
   const stats = [
-    { label: "Active Debates", value: totalDebates, color: "from-blue-500 to-cyan-500", icon: MessageSquare },
-    { label: "Community Members", value: totalUsers, color: "from-green-500 to-emerald-500", icon: Users },
-    { label: "Arguments Shared", value: totalArguments, color: "from-purple-500 to-pink-500", icon: Zap },
+    { label: "Active Debates", value: totalDebates, color: "bg-blue-500", icon: MessageSquare },
+    { label: "Community Members", value: totalUsers, color: "bg-purple-500", icon: Users },
+    { label: "Arguments Shared", value: totalArguments, color: "bg-amber-500", icon: Zap },
   ]
 
   return (
@@ -344,15 +348,15 @@ async function StatsDisplay() {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="flex items-center justify-between p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-300"
+          className="flex items-center justify-between p-4 rounded-xl bg-white/90 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-800/90 transition-all duration-300 border border-purple-100 dark:border-purple-900/30"
         >
           <div className="flex items-center gap-3">
-            <div className={`p-2 bg-gradient-to-r ${stat.color} rounded-lg`}>
+            <div className={`p-2 ${stat.color} rounded-lg shadow`}>
               <stat.icon className="h-4 w-4 text-white" />
             </div>
             <span className="font-medium text-slate-700 dark:text-slate-300">{stat.label}</span>
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent">
+          <span className="text-xl font-bold text-slate-800 dark:text-slate-200">
             {stat.value.toLocaleString()}
           </span>
         </div>
