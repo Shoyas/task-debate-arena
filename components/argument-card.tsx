@@ -15,11 +15,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { canEditArgument } from "@/lib/utils/time";
 import { formatDistanceToNow } from "date-fns";
 import { Clock, Edit, Heart, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 
 interface Argument{
@@ -60,7 +60,6 @@ export function ArgumentCard({
   const [editedContent, setEditedContent] = useState(argument.content)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
 
   const isAuthor = currentUserId === argument.author.id
   const canEdit = isAuthor && canEditArgument(new Date(argument.createdAt))
@@ -100,36 +99,21 @@ export function ArgumentCard({
       })
 
       if (response.ok) {
-        toast({
-          title: "Argument updated",
-          description: "Your argument has been successfully updated.",
-        })
+        toast.success("Argument updated")
         setIsEditing(false)
         
         if (onArgumentUpdate) onArgumentUpdate()
       } else {
         const error = await response.json();
         if (error.toxicWords) {
-          toast({
-            variant: "destructive",
-            title: "Moderation alert",
-            description: `Your argument contains inappropriate language: ${error.toxicWords.join(", ")}`,
-          })
+          toast.error(`Your argument contains inappropriate language: ${error.toxicWords.join(", ")}`)
         } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to update argument. Please try again.",
-          })
+          toast.error("Failed to update argument. Please try again.")
         }
       }
     } catch (error) {
       console.error("Error updating argument:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      })
+      toast.error("Failed to update argument. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -145,26 +129,15 @@ export function ArgumentCard({
       })
 
       if (response.ok) {
-        toast({
-          title: "Argument deleted",
-          description: "Your argument has been successfully deleted.",
-        })
+        toast.success("Argument deleted")
         setIsDeleting(false)
         if (onArgumentUpdate) onArgumentUpdate()
       } else {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to delete argument. Please try again.",
-        })
+        toast.error("Failed to delete argument. Please try again.")
       }
     } catch (error) {
       console.error("Error deleting argument:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      })
+      toast.error("Failed to delete argument. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -216,7 +189,7 @@ export function ArgumentCard({
               </Badge>
 
               {canEdit && (
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="flex gap-1 opacity-0 transition-opacity duration-300">
                   <Button
                     size="sm"
                     variant="ghost"
@@ -282,10 +255,10 @@ export function ArgumentCard({
                   size="sm"
                   onClick={handleVote}
                   disabled={isVoting || isAuthor || isDebateExpired}
-                  className={`flex items-center gap-2 transition-all duration-300 ${
+                  className={`flex items-center gap-2 transition-all duration-300 text-slate-800 dark:text-slate-200 ${
                     hasVoted
                       ? "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-lg transform scale-105"
-                      : "bg-white/60 dark:bg-slate-800/60 border-0 shadow-md hover:shadow-lg hover:bg-gradient-to-r hover:from-pink-50 hover:to-rose-50 dark:hover:from-pink-950 dark:hover:to-rose-950"
+                      : "bg-white/60 dark:bg-slate-800/60 border-0 shadow-md hover:shadow-lg dark:hover:from-pink-950 dark:hover:to-rose-950"
                   }`}
                 >
                   <Heart className={`h-4 w-4 ${hasVoted ? "fill-current" : ""}`} />

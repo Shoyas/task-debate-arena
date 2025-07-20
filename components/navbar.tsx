@@ -182,7 +182,7 @@ export function Navbar() {
                 side="right"
                 className="w-[300px] sm:w-[400px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-0"
               >
-                <div className="flex flex-col space-y-6 mt-8">
+                <div className="flex flex-col space-y-6 mt-8 p-6">
                   {navigation.map((item) => {
                     const active = isActive(item.href)
                     return (
